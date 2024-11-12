@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        <changeSet id="202411110109" author="admin@savne.net">
+
+            <createTable tableName='sale_products'>
+                <column name="id" type="BIGINT" autoIncrement="true">
+                    <constraints nullable="false" primaryKey="true"/>
+                </column>
+                <column name="sale_id" type="INTEGER">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="product_id" type="INTEGER">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="amount" type="INTEGER">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="created_at" type="TIMESTAMP">
+                    <constraints nullable="true"/>
+                </column>
+                <column name="updated_at" type="TIMESTAMP">
+                    <constraints nullable="true"/>
+                </column>
+                <column name="deleted_at" type="TIMESTAMP">
+                    <constraints nullable="true"/>
+                </column>
+                <column name="user_who_created" type="INTEGER">
+                    <constraints nullable="true"/>
+                </column>
+                <column name="user_who_updated" type="INTEGER">
+                    <constraints nullable="true"/>
+                </column>
+                <column name="user_who_deleted" type="INTEGER">
+                    <constraints nullable="true"/>
+                </column>
+            </createTable>
+
+            <addForeignKeyConstraint  baseColumnNames="sale_id"
+                baseTableName="sale_products"
+                constraintName="fk_sale_id"
+                deferrable="true"
+                initiallyDeferred="true"
+                onDelete="CASCADE"
+                onUpdate="RESTRICT"
+                referencedColumnNames="id"
+                referencedTableName="sales"
+                validate="true"/>
+
+            <rollback>
+                <dropTable cascadeConstraints="false" tableName="sale_products"/>
+            </rollback>
+
+        </changeSet>
+    </databaseChangeLog>

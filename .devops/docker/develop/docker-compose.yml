@@ -1,0 +1,18 @@
+version: '4.2'
+
+services:
+    sales-db:
+        image: postgres:17.0
+        container_name: sales-db
+        volumes:
+            - ~/storage_block/eda/sales-db/data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: sales
+            POSTGRES_USER: esteban
+            POSTGRES_PASSWORD: secret
+        networks:
+            - events-network
+
+networks:
+    events-network:
+        external: true

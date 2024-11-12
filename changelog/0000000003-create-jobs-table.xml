@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet
+            id="0000000003"
+            author="estebanbecerradev">
+        <createTable tableName="jobs">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="queue" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attempts" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reserved_at" type="integer"/>
+            <column name="available_at" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="jobs_queue_index" tableName="jobs">
+            <column name="queue"/>
+        </createIndex>
+
+        <createTable tableName="job_batches">
+            <column name="id" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_jobs" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pending_jobs" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="failed_jobs" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="failed_job_ids" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="options" type="text"/>
+            <column name="cancelled_at" type="integer"/>
+            <column name="created_at" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finished_at" type="integer"/>
+        </createTable>
+
+        <createTable tableName="failed_jobs">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="connection" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="queue" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exception" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="failed_at" type="timestamp(0)" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="failed_jobs"/>
+            <dropTable tableName="job_batches"/>
+            <dropTable tableName="jobs"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

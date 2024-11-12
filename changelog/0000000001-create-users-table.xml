@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet
+            id="0000000001"
+            author="estebanbecerradev">
+        <createTable tableName="users">
+            <column name="id" type="bigserial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="email_verified_at" type="timestamp(0)" />
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="remember_token" type="varchar(100)" />
+            <column name="created_at" type="timestamp(0)"/>
+            <column name="updated_at" type="timestamp(0)"/>
+            <column name="deleted_at" type="timestamp(0)"/>
+            <column name="user_who_created" type="bigint"/>
+            <column name="user_who_updated" type="bigint"/>
+            <column name="user_who_deleted" type="bigint"/>
+        </createTable>
+
+        <createTable tableName="password_reset_tokens">
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp(0)" />
+        </createTable>
+
+        <createTable tableName="sessions">
+            <column name="id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint" />
+            <column name="ip_address" type="varchar(45)" />
+            <column name="user_agent" type="text" />
+            <column name="payload" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_activity" type="integer">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="sessions_user_id_index" tableName="sessions">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="sessions_last_activity_index" tableName="sessions">
+            <column name="last_activity"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="sessions"/>
+            <dropTable tableName="password_reset_tokens"/>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
